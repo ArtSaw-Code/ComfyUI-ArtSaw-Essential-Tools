@@ -89,9 +89,9 @@ class ArtSawPromptFromFolderByIndex:
 
 
 class ArtSawImageFromFolderByIndex:
-    CATEGORY = "Loads one image from a folder using its sorted file index. Keywords: image, file, folder, index, loader."
-    SEARCH_ALIASES = ["image", "file", "folder", "index", "loader"]
-    DESCRIPTION = "Loads one image from a selected folder position, with optional recursive search and index wrapping."
+    CATEGORY = "Loads one image and its absolute file path from a folder using a sorted index. Keywords: image, file, folder, index, loader, path."
+    SEARCH_ALIASES = ["image", "file", "folder", "index", "loader", "path", "absolute path"]
+    DESCRIPTION = "Loads one image from a selected folder position and exposes its absolute path for nodes that need the original file."
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -104,8 +104,8 @@ class ArtSawImageFromFolderByIndex:
             "include_extension_in_filename": ("BOOLEAN", {"default": True}),
         }}
 
-    RETURN_TYPES = ("IMAGE", "STRING", "INT")
-    RETURN_NAMES = ("image", "filename", "file_count")
+    RETURN_TYPES = ("IMAGE", "STRING", "INT", "STRING")
+    RETURN_NAMES = ("image", "filename", "file_count", "absolute_image_path")
     FUNCTION = "load_image"
 
     def load_image(self, folder_path, index, extension=".jpg", recursive=False, wrap_index=True, include_extension_in_filename=True):
@@ -115,7 +115,7 @@ class ArtSawImageFromFolderByIndex:
         selected = files[index % len(files)] if wrap_index else files[index]
         raw_filename = os.path.basename(selected)
         filename = raw_filename if include_extension_in_filename else os.path.splitext(raw_filename)[0]
-        return load_image_file(selected), filename, len(files)
+        return load_image_file(selected), filename, len(files), selected
 
     @classmethod
     def IS_CHANGED(cls, folder_path, index, extension=".jpg", recursive=False, wrap_index=True, include_extension_in_filename=True):

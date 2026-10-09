@@ -43,6 +43,7 @@ Use it to:
 - Pair images with prompt files that share the same ordering.
 - Step through image sequences without changing filenames manually.
 - Read files from nested folders when needed.
+- Send the original `absolute_image_path` to another node without converting the file through ComfyUI's standard image pipeline.
 
 ### Load Image Batch from Folder | 🎨🪚 ArtSaw
 

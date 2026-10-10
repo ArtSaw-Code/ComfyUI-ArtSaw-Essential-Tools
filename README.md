@@ -6,6 +6,14 @@ ArtSaw Essential Tools removes repetitive manual file selection from your workfl
 
 Built for dataset workflows, image sequences, prompt libraries, and repeatable batch queues.
 
+## Install
+
+```text
+ComfyUI/custom_nodes/ComfyUI-ArtSaw-Essential-Tools
+```
+
+Restart ComfyUI after installation.
+
 ## Nodes At A Glance
 
 ![ArtSaw Essential Tools in the ComfyUI node browser](assets/essential-tools-node-browser.png)
@@ -43,6 +51,7 @@ Use it to:
 - Pair images with prompt files that share the same ordering.
 - Step through image sequences without changing filenames manually.
 - Read files from nested folders when needed.
+- Match several formats at once with an extension list such as `png, jpg, jpeg`.
 - Send the original `absolute_image_path` to another node without converting the file through ComfyUI's standard image pipeline.
 
 ### Load Image Batch from Folder | 🎨🪚 ArtSaw
@@ -76,3 +85,8 @@ Use it to:
 - Dataset pairing
 - Folder navigation
 - Repeatable ComfyUI workflows
+
+## More ArtSaw Tools
+
+- [🎨🪚 ArtSaw Tile Tools](https://github.com/ArtSaw-Code/ComfyUI-ArtSaw-Tile-Tools) splits large images into overlapping square tiles and stitches processed tiles back together.
+- [🎨🪚 ArtSaw 16-bit Grayscale PNG Tools](https://github.com/ArtSaw-Code/ComfyUI-ArtSaw-Heightmap-Tools) preserves 16-bit terrain data, fuses global and detailed terrain with screened Poisson reconstruction, and saves precision PNGs.

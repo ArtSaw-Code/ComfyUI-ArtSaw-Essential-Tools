@@ -11,14 +11,21 @@ def natural_key(path):
     return [int(part) if part.isdigit() else part for part in re.split(r"(\d+)", path.lower())]
 
 
-def normalize_extension(extension):
-    extension = extension.strip()
-    return extension if extension.startswith(".") else "." + extension
+def normalize_extensions(extension):
+    extensions = []
+    for value in str(extension).split(","):
+        value = value.strip().lower()
+        if not value:
+            continue
+        extensions.append(value if value.startswith(".") else "." + value)
+    if not extensions:
+        raise ValueError("Provide at least one extension, for example: png, jpg, jpeg.")
+    return tuple(dict.fromkeys(extensions))
 
 
 def collect_files(folder_path, extension, recursive):
     folder_path = os.path.abspath(os.path.expanduser(folder_path))
-    extension = normalize_extension(extension)
+    extensions = normalize_extensions(extension)
     if not os.path.isdir(folder_path):
         raise FileNotFoundError(f"Folder does not exist: {folder_path}")
 
@@ -26,7 +33,7 @@ def collect_files(folder_path, extension, recursive):
     for root, _, files in os.walk(folder_path) if recursive else [(folder_path, [], os.listdir(folder_path))]:
         for file in files:
             full_path = os.path.join(root, file)
-            if os.path.isfile(full_path) and file.lower().endswith(extension.lower()):
+            if os.path.isfile(full_path) and file.lower().endswith(extensions):
                 matches.append(full_path)
     return sorted(matches, key=natural_key)
 
@@ -37,7 +44,7 @@ def folder_state_hash(folder_path, extension, recursive, *settings):
     except FileNotFoundError:
         return f"missing:{folder_path}:{settings}"
 
-    digest = hashlib.sha256(str((normalize_extension(extension).lower(), recursive) + settings).encode())
+    digest = hashlib.sha256(str((normalize_extensions(extension), recursive) + settings).encode())
     for path in paths:
         stat = os.stat(path)
         digest.update(path.encode())
@@ -91,7 +98,7 @@ class ArtSawPromptFromFolderByIndex:
 class ArtSawImageFromFolderByIndex:
     CATEGORY = "Loads one image and its absolute file path from a folder using a sorted index. Keywords: image, file, folder, index, loader, path."
     SEARCH_ALIASES = ["image", "file", "folder", "index", "loader", "path", "absolute path"]
-    DESCRIPTION = "Loads one image from a selected folder position and exposes its absolute path for nodes that need the original file."
+    DESCRIPTION = "Loads one image from a selected folder position and exposes its absolute path. The extension field accepts a comma-separated list such as png, jpg, jpeg."
 
     @classmethod
     def INPUT_TYPES(cls):
